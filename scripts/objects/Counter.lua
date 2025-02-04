@@ -1,24 +1,29 @@
 ---@class Counter
-local Counter, super = Class()
+local Counter = Class()
 
 function Counter:init(start_value)
     self.value = start_value or 0
-    self.callbacks = {}
+    self.timer = Timer()
 end
 
 function Counter:tick()
     self.value = self.value + 1
-    if self.callbacks[self.value] then
-        for i, v in ipairs(self.callbacks[self.value]) do
-            v()
-        end
-        self.callbacks[self.value] = nil
-    end
+    local old_dt, old_dtmult = DT, DTMULT
+    DT=1
+    DTMULT=30
+    self.timer:update()
+    DT, DTMULT = old_dt, old_dtmult
 end
 
 function Counter:after(ticks, callback)
-    self.callbacks[self.value + ticks] = self.callbacks[self.value + ticks] or {}
-    table.insert(self.callbacks[self.value + ticks], callback)
+    return self.timer:after(ticks,callback)
 end
+
+function Counter:clear() return self.timer:clear() end
+function Counter:every(delay, func, count) return self.timer:every(delay, func, count) end
+function Counter:script(func) return self.timer:script(func) end
+function Counter:everyInstant(delay, func, count) return self.timer:everyInstant(delay, func, count) end
+function Counter:cancel(handle) return self.timer:cancel(handle) end
+
 
 return Counter

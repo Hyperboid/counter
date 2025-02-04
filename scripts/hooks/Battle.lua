@@ -9,11 +9,11 @@ end
 
 function Battle:nextTurn()
     self.turn_counter:tick()
-    super.nextTurn(self)
+    return super.nextTurn(self)
 end
 
 function Battle:afterTurns(turns, callback)
-    self.turn_counter:after(turns, callback)
+    return self.turn_counter:after(turns, callback)
 end
 
 return Battle
