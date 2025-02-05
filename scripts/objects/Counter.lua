@@ -9,8 +9,7 @@ end
 function Counter:tick()
     self.value = self.value + 1
     local old_dt, old_dtmult = DT, DTMULT
-    DT=1
-    DTMULT=30
+    DT, DTMULT=1, 30
     self.timer:update()
     DT, DTMULT = old_dt, old_dtmult
 end
